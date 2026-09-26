@@ -1,0 +1,125 @@
+// ==============================================================================
+// SCSS DESIGN SYSTEM: VARIABLES & TOKENS
+// Dynamic Dual Theme (Dark & Light) Glassmorphism Aesthetic
+// ==============================================================================
+
+:root,
+[data-theme='dark'] {
+  --bg-main: #090d16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 39, 0.72);
+  --bg-card-hover: rgba(30, 41, 59, 0.85);
+  --bg-card-solid: #131d33;
+  --bg-input: rgba(15, 23, 42, 0.8);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.14);
+  --border-focus: rgba(99, 102, 241, 0.6);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #090d16;
+  --navbar-bg: rgba(9, 13, 22, 0.85);
+  --brand-title-grad: linear-gradient(to right, #ffffff, #cbd5e1);
+  --ambient-grad-1: rgba(99, 102, 241, 0.12);
+  --ambient-grad-2: rgba(6, 182, 212, 0.08);
+  --ambient-grad-3: rgba(168, 85, 247, 0.08);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --modal-overlay: rgba(3, 7, 18, 0.75);
+}
+
+[data-theme='light'] {
+  --bg-main: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.88);
+  --bg-card-hover: rgba(255, 255, 255, 0.98);
+  --bg-card-solid: #ffffff;
+  --bg-input: #f1f5f9;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-medium: rgba(0, 0, 0, 0.14);
+  --border-focus: rgba(99, 102, 241, 0.6);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+  --navbar-bg: rgba(255, 255, 255, 0.88);
+  --brand-title-grad: linear-gradient(to right, #0f172a, #334155);
+  --ambient-grad-1: rgba(99, 102, 241, 0.06);
+  --ambient-grad-2: rgba(6, 182, 212, 0.05);
+  --ambient-grad-3: rgba(168, 85, 247, 0.04);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.12);
+  --modal-overlay: rgba(15, 23, 42, 0.45);
+}
+
+// Background & Surface Variables
+$bg-main: var(--bg-main);
+$bg-base: var(--bg-main);
+$bg-secondary: var(--bg-secondary);
+$bg-card: var(--bg-card);
+$bg-surface: var(--bg-card);
+$bg-card-hover: var(--bg-card-hover);
+$bg-card-solid: var(--bg-card-solid);
+$bg-input: var(--bg-input);
+
+// Borders & Glass
+$border-subtle: var(--border-subtle);
+$border-medium: var(--border-medium);
+$border-focus: var(--border-focus);
+$glass-blur: blur(16px);
+
+// Vibrant Accent Palette (Consistent across themes)
+$primary: #6366f1; // Electric Indigo
+$primary-hover: #4f46e5;
+$primary-glow: rgba(99, 102, 241, 0.35);
+$secondary: #06b6d4;
+
+$cyan: #06b6d4; // Cyan / Tech
+$cyan-glow: rgba(6, 182, 212, 0.3);
+
+$emerald: #10b981; // Success / Completed
+$emerald-glow: rgba(16, 185, 129, 0.3);
+
+$amber: #f59e0b; // Warning / In Progress
+$amber-glow: rgba(245, 158, 11, 0.3);
+
+$rose: #f43f5e; // Urgent / Overdue
+$rose-glow: rgba(244, 63, 94, 0.35);
+
+$purple: #a855f7; // Highlight / Recommenders
+
+// Text Hierarchy
+$text-primary: var(--text-primary);
+$text-secondary: var(--text-secondary);
+$text-muted: var(--text-muted);
+$text-inverse: var(--text-inverse);
+
+// Typography
+$font-family:
+  'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+// Shadows & Glows
+$shadow-sm: var(--shadow-sm);
+$shadow-md: var(--shadow-md);
+$shadow-lg: var(--shadow-lg);
+$shadow-glow: 0 0 25px $primary-glow;
+
+// Radius
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 18px;
+$radius-xl: 24px;
+$radius-pill: 9999px;
+
+// Transitions
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
