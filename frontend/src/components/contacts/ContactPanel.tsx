@@ -155,7 +155,7 @@ export const ContactPanel: React.FC<ContactPanelProps> = ({
         </div>
       ) : (
         <div
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '20px' }}
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))', gap: '20px' }}
         >
           {contacts.map((contact) => {
             const assignedLinks = contactLinks.filter((l) => l.contact_id === contact.id);

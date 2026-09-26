@@ -23,6 +23,8 @@ import {
 import type { Job, CompanyProfile, CustomCompanyFitResult } from '../../models';
 import { loadCustomCompanies, saveCustomCompany } from '../../services/custom-company.service';
 import { CustomCompanyModal } from './CustomCompanyModal';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 
 const POPULAR_SKILLS = [
@@ -116,6 +118,8 @@ function toEvaluation(result: CustomCompanyFitResult): CompanyEvaluation {
 }
 
 export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJobs, onNavigateToJobs }) => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [selectedSkills, setSelectedSkills] = useState<string[]>([
     'TypeScript',
     'React',
@@ -234,6 +238,12 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
         };
       });
 
+      if (!user) {
+        sessionStorage.setItem('pending_portfolio_import', JSON.stringify(itemsToImport));
+        navigate('/login?redirect=/jobs');
+        return;
+      }
+
       await onImportJobs(itemsToImport);
 
       confetti({
@@ -255,19 +265,25 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
   const handleImportSingle = async (item: CompanyEvaluation) => {
     const d = new Date();
     d.setDate(d.getDate() + 30);
-    await onImportJobs([
-      {
-        company: item.company.name,
-        role: `${targetRoleLevel.charAt(0).toUpperCase() + targetRoleLevel.slice(1)} Software Engineer`,
-        location: item.company.hqLocation,
-        work_model: item.company.workModel,
-        salary_min: item.company.avgBaseSalary,
-        salary_max: item.company.avgTotalComp,
-        application_deadline: d.toISOString(),
-        job_url: item.company.applicationUrl,
-        notes: `[Fit Score: ${item.fitScore}% · ${item.category}] Tech Stack: ${item.company.techStack.join(', ')}. ${item.interviewTips}`,
-      },
-    ]);
+    const singleItem = {
+      company: item.company.name,
+      role: `${targetRoleLevel.charAt(0).toUpperCase() + targetRoleLevel.slice(1)} Software Engineer`,
+      location: item.company.hqLocation,
+      work_model: item.company.workModel,
+      salary_min: item.company.avgBaseSalary,
+      salary_max: item.company.avgTotalComp,
+      application_deadline: d.toISOString(),
+      job_url: item.company.applicationUrl,
+      notes: `[Fit Score: ${item.fitScore}% · ${item.category}] Tech Stack: ${item.company.techStack.join(', ')}. ${item.interviewTips}`,
+    };
+
+    if (!user) {
+      sessionStorage.setItem('pending_portfolio_import', JSON.stringify([singleItem]));
+      navigate('/login?redirect=/jobs');
+      return;
+    }
+
+    await onImportJobs([singleItem]);
     confetti({ particleCount: 30, spread: 50, origin: { y: 0.7 } });
   };
 
@@ -284,6 +300,58 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '80px' }}>
+      {/* Free Public Access Callout for Unauthenticated Guests */}
+      {!user && (
+        <div
+          style={{
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%)',
+            border: '1px solid rgba(99, 102, 241, 0.3)',
+            borderRadius: '16px',
+            padding: '16px 20px',
+            marginBottom: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                background: 'linear-gradient(135deg, #6366F1, #06B6D4)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                flexShrink: 0,
+              }}
+            >
+              <Sparkles size={18} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-primary)' }}>
+                Free AI Career Scorer Active — No Sign In Required!
+              </div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                You can freely inspect career sites, calibrate candidate fit, and explore 50+ tech leaders. Sign up whenever you're ready to track live rounds!
+              </div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button className="btn btn--secondary btn--sm" onClick={() => navigate('/login')}>
+              Sign In
+            </button>
+            <button className="btn btn--primary btn--sm" onClick={() => navigate('/register')}>
+              Create Free Account
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header Banner */}
       <div className="section-title-bar" style={{ marginBottom: '24px' }}>
         <div>
@@ -342,25 +410,9 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
       </div>
 
       {/* Main Grid: Left Column Profile Controls, Right Column Portfolio & Results */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(320px, 380px) 1fr',
-          gap: '24px',
-          alignItems: 'start',
-        }}
-      >
+      <div className="company-fit-grid">
         {/* Left Column: Candidate Profile Form */}
-        <div
-          style={{
-            background: 'var(--bg-card-solid)',
-            border: '1px solid var(--border-medium)',
-            borderRadius: '16px',
-            padding: '24px',
-            position: 'sticky',
-            top: '84px',
-          }}
-        >
+        <div className="company-fit-sidebar">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '18px' }}>
             <Sliders size={18} color="#06B6D4" />
             <h3 style={{ margin: 0, fontSize: '1.05rem' }}>Your Candidate Profile</h3>
@@ -415,7 +467,7 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
           </div>
 
           {/* Experience & Level */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
+          <div className="form-grid-2col">
             <div className="form-group" style={{ margin: 0 }}>
               <label style={{ fontSize: '0.78rem', fontWeight: 600 }}>Target Level</label>
               <select
@@ -447,7 +499,7 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
           </div>
 
           {/* Salary Expectations */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
+          <div className="form-grid-2col">
             <div className="form-group" style={{ margin: 0 }}>
               <label style={{ fontSize: '0.78rem', fontWeight: 600 }}>Target Base ($k)</label>
               <input
@@ -472,7 +524,7 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
           </div>
 
           {/* Work Model & Company Size */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '18px' }}>
+          <div className="form-grid-2col">
             <div className="form-group" style={{ margin: 0 }}>
               <label style={{ fontSize: '0.78rem', fontWeight: 600 }}>Work Model</label>
               <select

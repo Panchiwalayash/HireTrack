@@ -28,8 +28,7 @@ app.use((req, _res, next) => {
 });
 
 app.use('/api/health', healthRoutes);
-
-app.use('/api/ai', authMiddleware, aiRoutes);
+app.use('/api/ai', aiRoutes);
 app.use('/api/jobs', authMiddleware, jobsRoutes);
 app.use('/api/tasks', authMiddleware, tasksRoutes);
 app.use('/api/contacts', authMiddleware, contactsRoutes);

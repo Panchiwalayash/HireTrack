@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Briefcase, UserCheck, Sparkles, ArrowRight, Shield, BarChart3, Brain, Network } from 'lucide-react';
+import { UserCheck, Sparkles, ArrowRight, Shield, BarChart3, Brain, Network } from 'lucide-react';
+import { BrandLogo } from '../components/common/BrandLogo';
 
 export const LandingPage: React.FC = () => {
   const { user } = useAuth();
@@ -22,12 +23,7 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="landing-page">
       <nav className="landing-page__nav">
-        <div className="landing-page__nav-brand">
-          <div className="landing-page__nav-icon">
-            <Briefcase size={22} color="white" />
-          </div>
-          <span className="landing-page__nav-title">HireTrack AI</span>
-        </div>
+        <BrandLogo size={36} onClick={() => navigate('/')} />
         <div className="landing-page__nav-actions">
           <button className="btn btn--ghost btn--sm" onClick={() => navigate('/login')}>
             Sign In

@@ -230,18 +230,9 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
       }}
     >
       <div
+        className="custom-company-modal-dialog"
         style={{
-          background: 'var(--bg-card-solid, #131722)',
-          border: '1px solid var(--border-medium, rgba(255, 255, 255, 0.12))',
-          borderRadius: '20px',
-          width: '100%',
           maxWidth: result ? '920px' : '720px',
-          maxHeight: '90vh',
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(99, 102, 241, 0.15)',
-          overflow: 'hidden',
-          transition: 'all 0.3s ease',
         }}
       >
         {/* Modal Header */}
@@ -321,7 +312,7 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
           {!result ? (
             /* Input Form View */
             <form onSubmit={handleEvaluate}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+              <div className="form-grid-2col">
                 <div className="form-group" style={{ margin: 0 }}>
                   <label
                     style={{
@@ -370,14 +361,7 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                 </div>
               </div>
 
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1.5fr 1fr 1fr 1fr',
-                  gap: '12px',
-                  marginBottom: '16px',
-                }}
-              >
+              <div className="modal-form-grid-role">
                 <div className="form-group" style={{ margin: 0 }}>
                   <label style={{ fontSize: '0.82rem', fontWeight: 600 }}>Target Role Title *</label>
                   <input
@@ -852,14 +836,7 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
               </div>
 
               {/* 4-Score Calibration Breakdown */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(4, 1fr)',
-                  gap: '10px',
-                  marginBottom: '20px',
-                }}
-              >
+              <div className="form-grid-4col">
                 {[
                   { label: 'Tech Stack Alignment', val: result.scoreBreakdown.techStackMatch, color: '#6366F1' },
                   {
@@ -914,7 +891,7 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
               </div>
 
               {/* Matched Skills vs Missing Skills */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+              <div className="form-grid-2col">
                 <div
                   style={{
                     background: 'rgba(16, 185, 129, 0.05)',

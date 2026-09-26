@@ -30,6 +30,10 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
+        path: '/ai-fit',
+        element: <FitScorerPage />,
+      },
+      {
         path: '/optimizer',
         element: <FitScorerPage />,
       },

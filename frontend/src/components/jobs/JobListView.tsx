@@ -317,14 +317,7 @@ export const JobListView: React.FC<JobListViewProps> = ({
       </div>
 
       {/* Metrics Ribbon */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: '12px',
-          marginBottom: '22px',
-        }}
-      >
+      <div className="metrics-ribbon-grid">
         <div
           style={{
             background: 'var(--bg-card-solid, #131722)',
@@ -1124,14 +1117,7 @@ export const JobListView: React.FC<JobListViewProps> = ({
         </div>
       ) : (
         /* Kanban Pipeline Board View */
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '16px',
-            alignItems: 'start',
-          }}
-        >
+        <div className="kanban-board-grid">
           {['saved', 'applied', 'interviewing', 'offer'].map((stageId) => {
             const stageConfig = STAGES.find((s) => s.id === stageId)!;
             const stageJobs = filteredJobs.filter((j) => j.status === stageId);
