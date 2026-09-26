@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Briefcase, Mail, Lock, Sparkles, ShieldCheck, Eye, EyeOff, UserPlus } from 'lucide-react';
+import { Mail, Lock, Sparkles, ShieldCheck, Eye, EyeOff, UserPlus, ArrowRight } from 'lucide-react';
+import { BrandLogo } from '../components/common/BrandLogo';
 
 export const RegisterPage: React.FC = () => {
-  const { isSupabaseConfigured, signUpWithEmail, signInWithGoogle, enterDemoMode } = useAuth();
+  const { isSupabaseConfigured, signUpWithEmail, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectUrl = searchParams.get('redirect') || '/dashboard';
@@ -58,29 +59,24 @@ export const RegisterPage: React.FC = () => {
     }
   };
 
-  const handleDemoAccess = () => {
-    enterDemoMode();
-    navigate(redirectUrl);
-  };
-
   return (
     <div className="auth-page">
       {/* Left side: Hero */}
       <div className="auth-page__hero">
         <div className="auth-page__hero-content">
           <div className="auth-page__hero-logo">
-            <Briefcase size={36} color="white" />
+            <BrandLogo size={42} showText={false} />
           </div>
           <h1 className="auth-page__hero-title">HireTrack AI</h1>
           <p className="auth-page__hero-subtitle">AI-Powered Job Hunt Command Center</p>
           <div className="auth-page__hero-features">
             <div className="auth-page__hero-feature">
               <ShieldCheck size={18} />
-              <span>Track deadlines, documents, and recommendations</span>
+              <span>Track deadlines, offer packages, and referral networks</span>
             </div>
             <div className="auth-page__hero-feature">
               <Sparkles size={18} />
-              <span>Get AI-powered university portfolio optimization</span>
+              <span>Multi-factor company culture fit & resume alignment</span>
             </div>
           </div>
         </div>
@@ -92,20 +88,20 @@ export const RegisterPage: React.FC = () => {
         <div className="auth-page__form-container">
           <div className="auth-page__form-header">
             <h2>Create Your Account</h2>
-            <p>Start tracking your graduate applications</p>
+            <p>Start tracking your tech career applications</p>
           </div>
 
           <div
             className="auth-page__status-banner"
             style={{
-              background: isSupabaseConfigured ? 'rgba(16, 185, 129, 0.08)' : 'rgba(6, 182, 212, 0.08)',
-              borderColor: isSupabaseConfigured ? 'rgba(16, 185, 129, 0.25)' : 'rgba(6, 182, 212, 0.25)',
-              color: isSupabaseConfigured ? '#10B981' : '#06B6D4',
+              background: isSupabaseConfigured ? 'rgba(16, 185, 129, 0.08)' : 'rgba(99, 102, 241, 0.08)',
+              borderColor: isSupabaseConfigured ? 'rgba(16, 185, 129, 0.25)' : 'rgba(99, 102, 241, 0.25)',
+              color: isSupabaseConfigured ? '#10B981' : '#6366F1',
             }}
           >
             {isSupabaseConfigured
               ? '🔒 Accounts are secured via Supabase Auth with Row Level Security.'
-              : '⚡ Demo Mode — accounts and data are preserved locally.'}
+              : '⚡ Local authentication mode active.'}
           </div>
 
           {errorMsg && <div className="auth-page__error">{errorMsg}</div>}
@@ -121,7 +117,7 @@ export const RegisterPage: React.FC = () => {
                   className="input"
                   type="email"
                   required
-                  placeholder="applicant@university.edu"
+                  placeholder="engineer@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   style={{ paddingLeft: '40px' }}
@@ -210,13 +206,21 @@ export const RegisterPage: React.FC = () => {
             </>
           )}
 
-          <div className="auth-page__divider">
-            <span>or</span>
+          {/* Standalone Free AI Fit Card (No Account Required) */}
+          <div className="auth-page__free-tool-box">
+            <div className="auth-page__free-tool-badge">
+              <Sparkles size={13} />
+              <span>Public Tool — No Sign-In Needed</span>
+            </div>
+            <p className="auth-page__free-tool-text">
+              Want to calculate company match scores before signing up? You can test AI Company Fit for free.
+            </p>
+            <Link to="/ai-fit" className="btn btn--secondary auth-page__ai-fit-btn">
+              <Sparkles size={15} color="var(--primary)" />
+              <span>Explore AI Company Fit</span>
+              <ArrowRight size={14} />
+            </Link>
           </div>
-          <button type="button" className="btn btn--ghost auth-page__demo-btn" onClick={handleDemoAccess}>
-            <Sparkles size={16} color="#F59E0B" />
-            <span>Instant Demo Access — No Account Required</span>
-          </button>
 
           <p className="auth-page__switch-link">
             Already have an account? <Link to="/login">Sign in</Link>

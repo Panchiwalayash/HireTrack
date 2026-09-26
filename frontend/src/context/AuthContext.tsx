@@ -6,13 +6,11 @@ interface AuthContextType {
   user: User | { id: string; email: string } | null;
   session: Session | null;
   isLoading: boolean;
-  isDemoMode: boolean;
   isSupabaseConfigured: boolean;
   signInWithEmail: (email: string, pass: string) => Promise<{ error?: string }>;
   signUpWithEmail: (email: string, pass: string) => Promise<{ error?: string }>;
   signInWithGoogle: () => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
-  enterDemoMode: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,23 +19,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | { id: string; email: string } | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDemoMode, setIsDemoMode] = useState<boolean>(() => {
-    return localStorage.getItem('grad_tracker_demo_mode') === 'true' || !isSupabaseConfigured;
-  });
 
   useEffect(() => {
+    // Purge any stale demo tokens or demo credentials
+    localStorage.removeItem('grad_tracker_demo_mode');
+    if (localStorage.getItem('grad_tracker_demo_user')?.includes('applicant@gradtracker.io')) {
+      localStorage.removeItem('grad_tracker_demo_user');
+    }
+
     if (!isSupabaseConfigured) {
-      const savedDemoUser = localStorage.getItem('grad_tracker_demo_user');
-      if (savedDemoUser) {
+      const savedUser = localStorage.getItem('hiretrack_local_user');
+      if (savedUser) {
         try {
-          setUser(JSON.parse(savedDemoUser));
+          setUser(JSON.parse(savedUser));
         } catch {
           setUser(null);
         }
       } else {
         setUser(null);
       }
-      setIsDemoMode(false);
       setIsLoading(false);
       return;
     }
@@ -61,41 +61,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signInWithEmail = async (email: string, pass: string) => {
     if (!isSupabaseConfigured) {
-      const demoUser = { id: `usr-${email.replace(/[^a-zA-Z0-9]/g, '') || 'applicant'}`, email };
-      localStorage.setItem('grad_tracker_demo_user', JSON.stringify(demoUser));
-      setUser(demoUser);
-      setIsDemoMode(false);
+      const localUser = { id: `usr-${email.replace(/[^a-zA-Z0-9]/g, '') || 'engineer'}`, email };
+      localStorage.setItem('hiretrack_local_user', JSON.stringify(localUser));
+      setUser(localUser);
       return {};
     }
     const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
     if (error) return { error: error.message };
-    setIsDemoMode(false);
-    localStorage.removeItem('grad_tracker_demo_mode');
     return {};
   };
 
   const signUpWithEmail = async (email: string, pass: string) => {
     if (!isSupabaseConfigured) {
-      const demoUser = { id: `usr-${email.replace(/[^a-zA-Z0-9]/g, '') || 'applicant'}`, email };
-      localStorage.setItem('grad_tracker_demo_user', JSON.stringify(demoUser));
-      setUser(demoUser);
-      setIsDemoMode(false);
+      const localUser = { id: `usr-${email.replace(/[^a-zA-Z0-9]/g, '') || 'engineer'}`, email };
+      localStorage.setItem('hiretrack_local_user', JSON.stringify(localUser));
+      setUser(localUser);
       return {};
     }
     const { error } = await supabase.auth.signUp({ email, password: pass });
     if (error) return { error: error.message };
-    setIsDemoMode(false);
-    localStorage.removeItem('grad_tracker_demo_mode');
     return {};
   };
 
   const signInWithGoogle = async () => {
     if (!isSupabaseConfigured) {
-      const demoUser = { id: 'usr-google-demo', email: 'google.applicant@gradtracker.io' };
-      localStorage.setItem('grad_tracker_demo_user', JSON.stringify(demoUser));
-      setUser(demoUser);
-      setIsDemoMode(true);
-      return {};
+      return { error: 'Google sign-in requires Supabase configuration.' };
     }
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -111,19 +101,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (isSupabaseConfigured) {
       await supabase.auth.signOut();
     }
+    localStorage.removeItem('hiretrack_local_user');
     localStorage.removeItem('grad_tracker_demo_user');
     localStorage.removeItem('grad_tracker_demo_mode');
-    setIsDemoMode(false);
     setUser(null);
     setSession(null);
-  };
-
-  const enterDemoMode = () => {
-    const demoUser = { id: 'usr-local-applicant', email: 'applicant@gradtracker.io' };
-    localStorage.setItem('grad_tracker_demo_user', JSON.stringify(demoUser));
-    localStorage.setItem('grad_tracker_demo_mode', 'true');
-    setUser(demoUser);
-    setIsDemoMode(true);
   };
 
   return (
@@ -132,13 +114,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user,
         session,
         isLoading,
-        isDemoMode,
         isSupabaseConfigured,
         signInWithEmail,
         signUpWithEmail,
         signInWithGoogle,
         signOut,
-        enterDemoMode,
       }}
     >
       {children}

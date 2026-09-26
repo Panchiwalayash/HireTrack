@@ -3,6 +3,7 @@ import React from 'react';
 interface BrandLogoProps {
   size?: number;
   showSubtitle?: boolean;
+  showText?: boolean;
   className?: string;
   onClick?: () => void;
 }
@@ -10,6 +11,7 @@ interface BrandLogoProps {
 export const BrandLogo: React.FC<BrandLogoProps> = ({
   size = 36,
   showSubtitle = true,
+  showText = true,
   className = '',
   onClick,
 }) => {
@@ -58,7 +60,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         </svg>
       </div>
 
-      <div className="brand-logo__text" style={{ display: 'flex', flexDirection: 'column' }}>
+      {showText && (
+        <div className="brand-logo__text" style={{ display: 'flex', flexDirection: 'column' }}>
         <div
           style={{
             fontSize: `${Math.max(size * 0.46, 16)}px`,
@@ -105,6 +108,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
           </div>
         )}
       </div>
+      )}
     </div>
   );
 };
