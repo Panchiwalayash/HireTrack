@@ -25,7 +25,6 @@
     "recharts": "^3.10.1"
   },
   "devDependencies": {
-    "@rolldown/binding-win32-x64-msvc": "^1.2.9",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
@@ -35,5 +34,10 @@
     "sass": "^1.104.1",
     "typescript": "~6.0.2",
     "vite": "^8.3.0"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-linux-x64-gnu": "1.2.9",
+    "@rolldown/binding-linux-x64-musl": "1.2.9",
+    "@rolldown/binding-win32-x64-msvc": "1.2.9"
   }
 }
