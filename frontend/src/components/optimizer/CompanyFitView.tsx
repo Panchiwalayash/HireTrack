@@ -290,11 +290,11 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
   const getCategoryBadgeClass = (category: FitCategory) => {
     switch (category) {
       case 'Dream':
-        return 'badge--warning';
+        return 'badge--dream';
       case 'Target':
-        return 'badge--info';
+        return 'badge--target';
       case 'Safe':
-        return 'badge--success';
+        return 'badge--safe';
     }
   };
 
@@ -359,17 +359,18 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
             <span
               className="badge"
               style={{
-                background: 'rgba(99, 102, 241, 0.15)',
-                color: '#818CF8',
-                border: '1px solid rgba(99, 102, 241, 0.3)',
+                background: 'var(--color-primary-bg)',
+                color: 'var(--color-primary-text)',
+                border: '1px solid var(--color-primary-border)',
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
+                fontWeight: 700,
               }}
             >
               AI Scoring Engine
             </span>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
               AI-Evaluated · Your Company List
             </span>
           </div>
@@ -432,13 +433,13 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
                     type="button"
                     onClick={() => toggleSkill(skill)}
                     style={{
-                      padding: '4px 10px',
+                      padding: '5px 11px',
                       borderRadius: '16px',
-                      fontSize: '0.74rem',
-                      fontWeight: isSelected ? 600 : 500,
-                      border: isSelected ? '1px solid #6366F1' : '1px solid var(--border-subtle)',
-                      background: isSelected ? 'rgba(99, 102, 241, 0.2)' : 'var(--bg-input)',
-                      color: isSelected ? '#A5B4FC' : 'var(--text-secondary)',
+                      fontSize: '0.76rem',
+                      fontWeight: isSelected ? 700 : 500,
+                      border: isSelected ? '1px solid var(--color-primary-border)' : '1px solid var(--border-medium)',
+                      background: isSelected ? 'var(--color-primary-bg)' : 'var(--bg-input)',
+                      color: isSelected ? 'var(--color-primary-text)' : 'var(--text-secondary)',
                       cursor: 'pointer',
                       transition: 'all 0.15s ease',
                     }}
@@ -983,9 +984,9 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
                               <span
                                 className="badge"
                                 style={{
-                                  background: 'rgba(99, 102, 241, 0.25)',
-                                  color: '#A5B4FC',
-                                  border: '1px solid rgba(99, 102, 241, 0.45)',
+                                  background: 'var(--color-primary-bg)',
+                                  color: 'var(--color-primary-text)',
+                                  border: '1px solid var(--color-primary-border)',
                                   fontSize: '0.68rem',
                                   display: 'inline-flex',
                                   alignItems: 'center',
@@ -993,7 +994,7 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
                                   fontWeight: 700,
                                 }}
                               >
-                                <Sparkles size={11} color="#818CF8" />
+                                <Sparkles size={11} color="var(--primary)" />
                                 AI Custom
                               </span>
                             )}
@@ -1002,7 +1003,12 @@ export const CompanyFitView: React.FC<CompanyFitViewProps> = ({ jobs, onImportJo
                             </span>
                             <span
                               className="badge"
-                              style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'var(--text-muted)' }}
+                              style={{
+                                background: 'var(--bg-input)',
+                                color: 'var(--text-secondary)',
+                                border: '1px solid var(--border-medium)',
+                                fontWeight: 600,
+                              }}
                             >
                               {item.company.workModel}
                             </span>

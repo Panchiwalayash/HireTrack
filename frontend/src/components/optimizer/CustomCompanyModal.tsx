@@ -17,6 +17,7 @@ import {
 import { assessCompanyFit } from '../../services/ai.service';
 import type { CandidateProfileContext, CustomCompanyFitResult } from '../../models';
 import confetti from 'canvas-confetti';
+import { useTheme } from '../../context/ThemeContext';
 
 interface CustomCompanyModalProps {
   isOpen: boolean;
@@ -45,6 +46,9 @@ export const CustomCompanyModal: React.FC<CustomCompanyModalProps> = ({
   onAddToPipeline,
   onPinToExplore,
 }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const [companyName, setCompanyName] = useState(initialCompanyName);
   const [careerUrl, setCareerUrl] = useState('');
   const [targetRole, setTargetRole] = useState('Full-Stack Software Engineer');
@@ -206,9 +210,15 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return '#10B981';
-    if (score >= 70) return '#06B6D4';
-    return '#F59E0B';
+    if (isDark) {
+      if (score >= 85) return '#34D399';
+      if (score >= 70) return '#38BDF8';
+      return '#FBBF24';
+    } else {
+      if (score >= 85) return '#047857'; // Emerald-700 (5.1:1 contrast on white)
+      if (score >= 70) return '#0284C7'; // Sky-600 (4.6:1 contrast on white)
+      return '#B45309'; // Amber-700 (4.7:1 contrast on white)
+    }
   };
 
   return (
@@ -716,8 +726,10 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
               {/* Score & Verdict Hero Banner */}
               <div
                 style={{
-                  background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(6, 182, 212, 0.08) 100%)',
-                  border: '1px solid var(--border-medium, rgba(255, 255, 255, 0.12))',
+                  background: isDark
+                    ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(6, 182, 212, 0.08) 100%)'
+                    : 'linear-gradient(135deg, rgba(99, 102, 241, 0.06) 0%, rgba(6, 182, 212, 0.05) 100%)',
+                  border: '1px solid var(--border-medium)',
                   borderRadius: '16px',
                   padding: '24px',
                   marginBottom: '20px',
@@ -731,8 +743,8 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                 <div style={{ textAlign: 'center', minWidth: '110px' }}>
                   <div
                     style={{
-                      width: '90px',
-                      height: '90px',
+                      width: '92px',
+                      height: '92px',
                       borderRadius: '50%',
                       border: `4px solid ${getScoreColor(result.fitScore)}`,
                       display: 'flex',
@@ -740,8 +752,10 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                       alignItems: 'center',
                       justifyContent: 'center',
                       margin: '0 auto',
-                      background: 'rgba(0, 0, 0, 0.3)',
-                      boxShadow: `0 0 20px ${getScoreColor(result.fitScore)}33`,
+                      background: isDark ? 'rgba(0, 0, 0, 0.4)' : '#FFFFFF',
+                      boxShadow: isDark
+                        ? `0 0 20px ${getScoreColor(result.fitScore)}33`
+                        : '0 4px 16px rgba(0, 0, 0, 0.06)',
                     }}
                   >
                     <span style={{ fontSize: '1.75rem', fontWeight: 800, color: getScoreColor(result.fitScore) }}>
@@ -749,57 +763,42 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                     </span>
                     <span
                       style={{
-                        fontSize: '0.65rem',
+                        fontSize: '0.66rem',
                         textTransform: 'uppercase',
-                        color: 'var(--text-muted)',
+                        color: 'var(--text-secondary)',
                         letterSpacing: '0.5px',
+                        fontWeight: 700,
                       }}
                     >
                       Fit Score
                     </span>
                   </div>
-                  <div
-                    style={{
-                      marginTop: '8px',
-                      padding: '3px 10px',
-                      borderRadius: '12px',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      display: 'inline-block',
-                      background:
+                  <div style={{ marginTop: '8px' }}>
+                    <span
+                      className={`badge ${
                         result.category === 'Safe'
-                          ? 'rgba(16, 185, 129, 0.2)'
+                          ? 'badge--safe'
                           : result.category === 'Target'
-                            ? 'rgba(6, 182, 212, 0.2)'
-                            : 'rgba(245, 158, 11, 0.2)',
-                      color:
-                        result.category === 'Safe'
-                          ? '#34D399'
-                          : result.category === 'Target'
-                            ? '#38BDF8'
-                            : '#FBBF24',
-                      border: `1px solid ${getScoreColor(result.fitScore)}55`,
-                    }}
-                  >
-                    {result.category} Tier
+                            ? 'badge--target'
+                            : 'badge--dream'
+                      }`}
+                      style={{ padding: '4px 12px', borderRadius: '12px', fontSize: '0.78rem' }}
+                    >
+                      {result.category} Tier
+                    </span>
                   </div>
                 </div>
 
                 {/* Verdict text */}
                 <div style={{ flex: 1, minWidth: '280px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                    <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 700 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                       {result.targetRole} @ {result.companyName}
                     </h3>
                     {result.websiteSnippetUsed && (
                       <span
-                        style={{
-                          fontSize: '0.7rem',
-                          background: 'rgba(16, 185, 129, 0.15)',
-                          color: '#34D399',
-                          padding: '2px 8px',
-                          borderRadius: '8px',
-                        }}
+                        className="badge badge--safe"
+                        style={{ fontSize: '0.72rem', padding: '3px 8px', borderRadius: '8px' }}
                       >
                         ✓ Live Site Verified
                       </span>
@@ -811,10 +810,11 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                   <div
                     style={{
                       display: 'flex',
-                      gap: '14px',
+                      gap: '16px',
                       marginTop: '12px',
-                      fontSize: '0.78rem',
-                      color: 'var(--text-muted)',
+                      fontSize: '0.8rem',
+                      color: 'var(--text-secondary)',
+                      flexWrap: 'wrap',
                     }}
                   >
                     <span>
@@ -822,80 +822,111 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                     </span>
                     <span>
                       💰 Est. Comp:{' '}
-                      <strong style={{ color: '#10B981' }}>
+                      <strong style={{ color: isDark ? '#34D399' : '#047857' }}>
                         ${(result.estimatedCompRange.min / 1000).toFixed(0)}k - $
                         {(result.estimatedCompRange.max / 1000).toFixed(0)}k
                       </strong>
                     </span>
                     <span>
                       🏢 Bar:{' '}
-                      <strong style={{ color: '#818CF8' }}>{result.interviewInsights.estimatedDifficulty}</strong>
+                      <strong style={{ color: isDark ? '#C7D2FE' : '#4338CA' }}>
+                        {result.interviewInsights.estimatedDifficulty}
+                      </strong>
                     </span>
                   </div>
                 </div>
               </div>
 
               {/* 4-Score Calibration Breakdown */}
-              <div className="form-grid-4col">
+              <div className="form-grid-4col" style={{ marginBottom: '20px' }}>
                 {[
-                  { label: 'Tech Stack Alignment', val: result.scoreBreakdown.techStackMatch, color: '#6366F1' },
+                  {
+                    label: 'Tech Stack Alignment',
+                    val: result.scoreBreakdown.techStackMatch,
+                    lightColor: '#4338CA',
+                    darkColor: '#A5B4FC',
+                  },
                   {
                     label: 'Experience & Seniority',
                     val: result.scoreBreakdown.experienceMatch,
-                    color: '#06B6D4',
+                    lightColor: '#0369A1',
+                    darkColor: '#38BDF8',
                   },
-                  { label: 'Role Scope Match', val: result.scoreBreakdown.roleScopeMatch, color: '#818CF8' },
-                  { label: 'Stage & Culture Fit', val: result.scoreBreakdown.cultureStageFit, color: '#10B981' },
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.03)',
-                      border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.06))',
-                      borderRadius: '10px',
-                      padding: '12px',
-                    }}
-                  >
-                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                      {item.label}
-                    </div>
+                  {
+                    label: 'Role Scope Match',
+                    val: result.scoreBreakdown.roleScopeMatch,
+                    lightColor: '#4338CA',
+                    darkColor: '#C7D2FE',
+                  },
+                  {
+                    label: 'Stage & Culture Fit',
+                    val: result.scoreBreakdown.cultureStageFit,
+                    lightColor: '#047857',
+                    darkColor: '#34D399',
+                  },
+                ].map((item, idx) => {
+                  const activeColor = isDark ? item.darkColor : item.lightColor;
+                  return (
                     <div
+                      key={idx}
                       style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'baseline',
-                        marginBottom: '6px',
-                      }}
-                    >
-                      <span style={{ fontSize: '1.1rem', fontWeight: 700, color: item.color }}>{item.val}%</span>
-                    </div>
-                    <div
-                      style={{
-                        height: '4px',
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        borderRadius: '2px',
-                        overflow: 'hidden',
+                        background: 'var(--bg-card-solid)',
+                        border: '1px solid var(--border-medium)',
+                        borderRadius: '10px',
+                        padding: '12px',
+                        boxShadow: 'var(--shadow-sm)',
                       }}
                     >
                       <div
                         style={{
-                          width: `${item.val}%`,
-                          height: '100%',
-                          background: item.color,
-                          borderRadius: '2px',
+                          fontSize: '0.76rem',
+                          color: 'var(--text-secondary)',
+                          fontWeight: 600,
+                          marginBottom: '6px',
                         }}
-                      />
+                      >
+                        {item.label}
+                      </div>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'baseline',
+                          marginBottom: '8px',
+                        }}
+                      >
+                        <span style={{ fontSize: '1.25rem', fontWeight: 800, color: activeColor }}>
+                          {item.val}%
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          height: '6px',
+                          background: isDark ? 'rgba(255, 255, 255, 0.1)' : '#E2E8F0',
+                          borderRadius: '3px',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: `${item.val}%`,
+                            height: '100%',
+                            background: activeColor,
+                            borderRadius: '3px',
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Matched Skills vs Missing Skills */}
-              <div className="form-grid-2col">
+              <div className="form-grid-2col" style={{ marginBottom: '20px' }}>
                 <div
                   style={{
-                    background: 'rgba(16, 185, 129, 0.05)',
-                    border: '1px solid rgba(16, 185, 129, 0.2)',
+                    background: 'var(--color-success-bg)',
+                    border: '1px solid var(--color-success-border)',
                     borderRadius: '12px',
                     padding: '16px',
                   }}
@@ -906,8 +937,8 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                       alignItems: 'center',
                       gap: '6px',
                       marginBottom: '10px',
-                      color: '#34D399',
-                      fontSize: '0.84rem',
+                      color: 'var(--color-success-text)',
+                      fontSize: '0.86rem',
                       fontWeight: 700,
                     }}
                   >
@@ -919,12 +950,13 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                       <span
                         key={idx}
                         style={{
-                          padding: '3px 8px',
+                          padding: '4px 10px',
                           borderRadius: '8px',
-                          background: 'rgba(16, 185, 129, 0.15)',
-                          color: '#A7F3D0',
-                          fontSize: '0.76rem',
-                          fontWeight: 600,
+                          background: isDark ? 'rgba(16, 185, 129, 0.25)' : '#DCFCE7',
+                          color: 'var(--color-success-text)',
+                          fontSize: '0.78rem',
+                          fontWeight: 700,
+                          border: '1px solid var(--color-success-border)',
                         }}
                       >
                         ✓ {skill}
@@ -935,8 +967,8 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
 
                 <div
                   style={{
-                    background: 'rgba(245, 158, 11, 0.05)',
-                    border: '1px solid rgba(245, 158, 11, 0.2)',
+                    background: 'var(--color-warning-bg)',
+                    border: '1px solid var(--color-warning-border)',
                     borderRadius: '12px',
                     padding: '16px',
                   }}
@@ -947,8 +979,8 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                       alignItems: 'center',
                       gap: '6px',
                       marginBottom: '10px',
-                      color: '#FBBF24',
-                      fontSize: '0.84rem',
+                      color: 'var(--color-warning-text)',
+                      fontSize: '0.86rem',
                       fontWeight: 700,
                     }}
                   >
@@ -961,19 +993,20 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                         <span
                           key={idx}
                           style={{
-                            padding: '3px 8px',
+                            padding: '4px 10px',
                             borderRadius: '8px',
-                            background: 'rgba(245, 158, 11, 0.15)',
-                            color: '#FDE68A',
-                            fontSize: '0.76rem',
-                            fontWeight: 600,
+                            background: isDark ? 'rgba(245, 158, 11, 0.25)' : '#FEF3C7',
+                            color: 'var(--color-warning-text)',
+                            fontSize: '0.78rem',
+                            fontWeight: 700,
+                            border: '1px solid var(--color-warning-border)',
                           }}
                         >
                           ⚡ {skill}
                         </span>
                       ))
                     ) : (
-                      <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                      <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
                         No major skill bottlenecks detected!
                       </span>
                     )}
@@ -984,8 +1017,8 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
               {/* Interview Loop Playbook */}
               <div
                 style={{
-                  background: 'rgba(255, 255, 255, 0.02)',
-                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                  background: isDark ? 'rgba(255, 255, 255, 0.02)' : 'var(--bg-secondary)',
+                  border: '1px solid var(--border-medium)',
                   borderRadius: '12px',
                   padding: '16px',
                   marginBottom: '20px',
@@ -993,15 +1026,16 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
               >
                 <div
                   style={{
-                    fontSize: '0.84rem',
+                    fontSize: '0.86rem',
                     fontWeight: 700,
-                    marginBottom: '8px',
+                    marginBottom: '10px',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
+                    color: 'var(--text-primary)',
                   }}
                 >
-                  <Award size={16} color="#818CF8" />
+                  <Award size={16} color="var(--primary)" />
                   <span>Anticipated Interview Loop & Bar Expectations</span>
                 </div>
                 <div
@@ -1015,27 +1049,51 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                     <div
                       key={idx}
                       style={{
-                        padding: '8px 10px',
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        borderRadius: '6px',
-                        fontSize: '0.76rem',
-                        color: 'var(--text-secondary)',
+                        padding: '10px 12px',
+                        background: 'var(--bg-card-solid)',
+                        border: '1px solid var(--border-medium)',
+                        borderRadius: '8px',
+                        fontSize: '0.78rem',
+                        color: 'var(--text-primary)',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '6px',
+                        boxShadow: 'var(--shadow-sm)',
                       }}
                     >
-                      <strong style={{ color: '#818CF8' }}>#{idx + 1}</strong> {round}
+                      <strong
+                        style={{
+                          color: 'var(--color-primary-text)',
+                          background: 'var(--color-primary-bg)',
+                          padding: '1px 5px',
+                          borderRadius: '4px',
+                          fontSize: '0.72rem',
+                        }}
+                      >
+                        #{idx + 1}
+                      </strong>
+                      <span>{round}</span>
                     </div>
                   ))}
                 </div>
-                <div style={{ marginTop: '10px', fontSize: '0.76rem', color: 'var(--text-muted)' }}>
-                  <strong>Behavioral Focus:</strong> {result.interviewInsights.behavioralFocus}
+                <div
+                  style={{
+                    marginTop: '12px',
+                    fontSize: '0.8rem',
+                    color: 'var(--text-secondary)',
+                    lineHeight: '1.5',
+                  }}
+                >
+                  <strong style={{ color: 'var(--text-primary)' }}>Behavioral Focus:</strong>{' '}
+                  {result.interviewInsights.behavioralFocus}
                 </div>
               </div>
 
               {/* Tailored Application Playbook: Resume Bullets & Outreach Pitch */}
               <div
                 style={{
-                  background: 'rgba(99, 102, 241, 0.04)',
-                  border: '1px solid rgba(99, 102, 241, 0.15)',
+                  background: 'var(--color-primary-bg)',
+                  border: '1px solid var(--color-primary-border)',
                   borderRadius: '12px',
                   padding: '16px',
                   marginBottom: '24px',
@@ -1049,9 +1107,11 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       marginBottom: '8px',
+                      flexWrap: 'wrap',
+                      gap: '8px',
                     }}
                   >
-                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#A5B4FC' }}>
+                    <span style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--color-primary-text)' }}>
                       📝 Recommended Resume Bullets for {result.companyName}
                     </span>
                     <button
@@ -1061,14 +1121,15 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                       }
                       className="btn btn--sm"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.06)',
-                        border: 'none',
-                        fontSize: '0.72rem',
-                        padding: '3px 8px',
+                        background: 'var(--bg-card-solid)',
+                        border: '1px solid var(--border-medium)',
+                        fontSize: '0.74rem',
+                        padding: '4px 10px',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '4px',
-                        color: copiedSection === 'resume' ? '#10B981' : 'var(--text-secondary)',
+                        color: copiedSection === 'resume' ? 'var(--color-success-text)' : 'var(--text-secondary)',
+                        fontWeight: 600,
                       }}
                     >
                       {copiedSection === 'resume' ? <Check size={12} /> : <Copy size={12} />}
@@ -1079,9 +1140,9 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                     style={{
                       margin: 0,
                       paddingLeft: '18px',
-                      fontSize: '0.78rem',
-                      color: 'var(--text-secondary)',
-                      lineHeight: '1.6',
+                      fontSize: '0.8rem',
+                      color: 'var(--text-primary)',
+                      lineHeight: '1.65',
                     }}
                   >
                     {result.tailoredApplicationKit.resumeHighlights.map((bullet, idx) => (
@@ -1100,9 +1161,11 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       marginBottom: '6px',
+                      flexWrap: 'wrap',
+                      gap: '8px',
                     }}
                   >
-                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#06B6D4' }}>
+                    <span style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--color-info-text)' }}>
                       ✉️ Tailored Cold Outreach / Referral Pitch
                     </span>
                     <button
@@ -1112,14 +1175,15 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                       }
                       className="btn btn--sm"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.06)',
-                        border: 'none',
-                        fontSize: '0.72rem',
-                        padding: '3px 8px',
+                        background: 'var(--bg-card-solid)',
+                        border: '1px solid var(--border-medium)',
+                        fontSize: '0.74rem',
+                        padding: '4px 10px',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '4px',
-                        color: copiedSection === 'outreach' ? '#10B981' : 'var(--text-secondary)',
+                        color: copiedSection === 'outreach' ? 'var(--color-success-text)' : 'var(--text-secondary)',
+                        fontWeight: 600,
                       }}
                     >
                       {copiedSection === 'outreach' ? <Check size={12} /> : <Copy size={12} />}
@@ -1128,13 +1192,15 @@ Interview Rounds: ${result.interviewInsights.expectedRounds.join(' | ')}`;
                   </div>
                   <div
                     style={{
-                      background: 'rgba(0, 0, 0, 0.25)',
-                      padding: '10px 12px',
+                      background: 'var(--bg-card-solid)',
+                      border: '1px solid var(--border-medium)',
+                      padding: '12px 14px',
                       borderRadius: '8px',
-                      fontSize: '0.76rem',
-                      color: 'var(--text-secondary)',
-                      lineHeight: '1.5',
+                      fontSize: '0.8rem',
+                      color: 'var(--text-primary)',
+                      lineHeight: '1.6',
                       fontStyle: 'italic',
+                      boxShadow: 'var(--shadow-sm)',
                     }}
                   >
                     "{result.tailoredApplicationKit.recruiterOutreachPitch}"
