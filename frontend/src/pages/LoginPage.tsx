@@ -184,7 +184,7 @@ export const LoginPage: React.FC = () => {
               Want to calculate company match scores before signing up? You can test AI Company Fit for free.
             </p>
             <Link to="/ai-fit" className="btn btn--secondary auth-page__ai-fit-btn">
-              <Sparkles size={15} color="var(--primary)" />
+              <Sparkles size={16} color="#6366f1" />
               <span>Explore AI Company Fit</span>
               <ArrowRight size={14} />
             </Link>

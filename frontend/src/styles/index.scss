@@ -309,6 +309,11 @@ a {
     align-items: center;
   }
 
+  &__ai-icon {
+    color: var(--primary, #6366f1);
+    flex-shrink: 0;
+  }
+
   &__auth-group {
     display: flex;
     align-items: center;

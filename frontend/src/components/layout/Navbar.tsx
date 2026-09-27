@@ -85,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   to="/optimizer"
                   className={({ isActive }) => `navbar__nav-link ${isActive ? 'navbar__nav-link--active' : ''}`}
                 >
-                  <Sparkles size={15} color="var(--primary)" />
+                  <Sparkles size={15} className="navbar__ai-icon" />
                   <span>AI Company Fit</span>
                   <span className="navbar__badge-free">FREE</span>
                 </NavLink>
@@ -113,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   to="/optimizer"
                   className={({ isActive }) => `navbar__nav-link ${isActive ? 'navbar__nav-link--active' : ''}`}
                 >
-                  <Sparkles size={15} color="var(--primary)" />
+                  <Sparkles size={15} className="navbar__ai-icon" />
                   <span style={{ fontWeight: 600 }}>AI Company Fit</span>
                   <span className="navbar__badge-free">FREE TOOL</span>
                 </NavLink>
@@ -252,7 +252,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   `navbar__mobile-drawer-link ${isActive ? 'navbar__mobile-drawer-link--active' : ''}`
                 }
               >
-                <Sparkles size={18} color="var(--primary)" />
+                <Sparkles size={18} className="navbar__ai-icon" />
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
                   <span>AI Company Fit</span>
                   <span className="navbar__badge-free">FREE</span>
@@ -294,7 +294,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   `navbar__mobile-drawer-link ${isActive ? 'navbar__mobile-drawer-link--active' : ''}`
                 }
               >
-                <Sparkles size={18} color="var(--primary)" />
+                <Sparkles size={18} className="navbar__ai-icon" />
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <span style={{ fontWeight: 600 }}>AI Company Fit</span>
