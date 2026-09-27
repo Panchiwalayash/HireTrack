@@ -9,7 +9,7 @@ interface AuthContextType {
   isSupabaseConfigured: boolean;
   signInWithEmail: (email: string, pass: string) => Promise<{ error?: string }>;
   signUpWithEmail: (email: string, pass: string) => Promise<{ error?: string }>;
-  signInWithGoogle: () => Promise<{ error?: string }>;
+  signInWithGoogle: (redirectToPath?: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
 }
 
@@ -83,14 +83,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return {};
   };
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (redirectToPath?: string) => {
     if (!isSupabaseConfigured) {
       return { error: 'Google sign-in requires Supabase configuration.' };
     }
+    const targetPath = redirectToPath?.startsWith('/') ? redirectToPath : '/dashboard';
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin + '/dashboard',
+        redirectTo: `${window.location.origin}${targetPath}`,
       },
     });
     if (error) return { error: error.message };

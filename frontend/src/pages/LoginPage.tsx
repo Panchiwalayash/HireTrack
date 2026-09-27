@@ -37,7 +37,7 @@ export const LoginPage: React.FC = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      await signInWithGoogle();
+      await signInWithGoogle(redirectUrl);
     } catch (err: any) {
       setErrorMsg(err.message || 'Google sign-in failed');
     }
