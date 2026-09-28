@@ -12,6 +12,7 @@ import { EditJobPage } from './pages/EditJobPage';
 import { ContactsPage } from './pages/ContactsPage';
 import { AddContactPage } from './pages/AddContactPage';
 import { EditContactPage } from './pages/EditContactPage';
+import { ResumeTailorPage } from './pages/ResumeTailorPage';
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,14 @@ export const router = createBrowserRouter([
       {
         path: '/fit-scorer',
         element: <FitScorerPage />,
+      },
+      {
+        path: '/tailor',
+        element: <ResumeTailorPage />,
+      },
+      {
+        path: '/resume-tailor',
+        element: <ResumeTailorPage />,
       },
       {
         element: <ProtectedRoute />,

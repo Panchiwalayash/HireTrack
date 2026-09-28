@@ -46,6 +46,11 @@
   --color-danger-text: #fda4af;
   --color-danger-bg: rgba(244, 63, 94, 0.18);
   --color-danger-border: rgba(244, 63, 94, 0.4);
+
+  // Scrollbar Tokens
+  --scrollbar-thumb: rgba(255, 255, 255, 0.22);
+  --scrollbar-thumb-hover: rgba(99, 102, 241, 0.65);
+  --scrollbar-track: rgba(15, 23, 42, 0.25);
 }
 
 [data-theme='light'] {
@@ -90,6 +95,11 @@
   --color-danger-text: #991b1b;
   --color-danger-bg: #fef2f2;
   --color-danger-border: rgba(239, 68, 68, 0.4);
+
+  // Scrollbar Tokens
+  --scrollbar-thumb: rgba(100, 116, 139, 0.35);
+  --scrollbar-thumb-hover: rgba(99, 102, 241, 0.7);
+  --scrollbar-track: rgba(241, 245, 249, 0.6);
 }
 
 // Background & Surface Variables
@@ -101,6 +111,11 @@ $bg-surface: var(--bg-card);
 $bg-card-hover: var(--bg-card-hover);
 $bg-card-solid: var(--bg-card-solid);
 $bg-input: var(--bg-input);
+
+// Scrollbar Variables
+$scrollbar-thumb: var(--scrollbar-thumb);
+$scrollbar-thumb-hover: var(--scrollbar-thumb-hover);
+$scrollbar-track: var(--scrollbar-track);
 
 // Borders & Glass
 $border-subtle: var(--border-subtle);
@@ -157,7 +172,13 @@ $radius-lg: 18px;
 $radius-xl: 24px;
 $radius-pill: 9999px;
 
-// Transitions
+// Transitions & Springs
+$ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
 $transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 $transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 $transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+$transition-spring: 0.3s $ease-spring;
+
+// Brand Glow Shadows
+$shadow-brand: 0 8px 24px -4px rgba(99, 102, 241, 0.35);
+$shadow-brand-lg: 0 16px 40px -8px rgba(99, 102, 241, 0.4);

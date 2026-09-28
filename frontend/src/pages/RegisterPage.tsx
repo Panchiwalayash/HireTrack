@@ -91,18 +91,6 @@ export const RegisterPage: React.FC = () => {
             <p>Start tracking your tech career applications</p>
           </div>
 
-          <div
-            className="auth-page__status-banner"
-            style={{
-              background: isSupabaseConfigured ? 'rgba(16, 185, 129, 0.08)' : 'rgba(99, 102, 241, 0.08)',
-              borderColor: isSupabaseConfigured ? 'rgba(16, 185, 129, 0.25)' : 'rgba(99, 102, 241, 0.25)',
-              color: isSupabaseConfigured ? '#10B981' : '#6366F1',
-            }}
-          >
-            {isSupabaseConfigured
-              ? '🔒 Accounts are secured via Supabase Auth with Row Level Security.'
-              : '⚡ Local authentication mode active.'}
-          </div>
 
           {errorMsg && <div className="auth-page__error">{errorMsg}</div>}
           {successMsg && <div className="auth-page__success">{successMsg}</div>}
@@ -206,18 +194,18 @@ export const RegisterPage: React.FC = () => {
             </>
           )}
 
-          {/* Standalone Free AI Fit Card (No Account Required) */}
+          {/* Standalone Free AI Tools Card (No Account Required) */}
           <div className="auth-page__free-tool-box">
             <div className="auth-page__free-tool-badge">
               <Sparkles size={13} />
-              <span>Public Tool — No Sign-In Needed</span>
+              <span>Free Public Access</span>
             </div>
             <p className="auth-page__free-tool-text">
-              Want to calculate company match scores before signing up? You can test AI Company Fit for free.
+              Want to explore before signing up? You can test our free AI career tools with zero sign-in required.
             </p>
             <Link to="/ai-fit" className="btn btn--secondary auth-page__ai-fit-btn">
               <Sparkles size={16} color="#6366f1" />
-              <span>Explore AI Company Fit</span>
+              <span>Explore Free AI Tools</span>
               <ArrowRight size={14} />
             </Link>
           </div>

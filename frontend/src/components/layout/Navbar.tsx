@@ -14,6 +14,7 @@ import {
   X,
   UserPlus,
   Home,
+  FileText,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -78,7 +79,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   className={({ isActive }) => `navbar__nav-link ${isActive ? 'navbar__nav-link--active' : ''}`}
                 >
                   <Briefcase size={15} />
-                  <span>Applications {jobs.length > 0 ? `(${jobs.length})` : ''}</span>
+                  <span>
+                    <span className="nav-text-full">Applications {jobs.length > 0 ? `(${jobs.length})` : ''}</span>
+                    <span className="nav-text-short">Jobs {jobs.length > 0 ? `(${jobs.length})` : ''}</span>
+                  </span>
                 </NavLink>
 
                 <NavLink
@@ -86,8 +90,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   className={({ isActive }) => `navbar__nav-link ${isActive ? 'navbar__nav-link--active' : ''}`}
                 >
                   <Sparkles size={15} className="navbar__ai-icon" />
-                  <span>AI Company Fit</span>
+                  <span>
+                    <span className="nav-text-full">AI Company Fit</span>
+                    <span className="nav-text-short">Company Fit</span>
+                  </span>
                   <span className="navbar__badge-free">FREE</span>
+                </NavLink>
+
+                <NavLink
+                  to="/tailor"
+                  className={({ isActive }) => `navbar__nav-link ${isActive ? 'navbar__nav-link--active' : ''}`}
+                >
+                  <FileText size={15} />
+                  <span>
+                    <span className="nav-text-full">Resume & Cover Letter</span>
+                    <span className="nav-text-short">Resume Suite</span>
+                  </span>
                 </NavLink>
 
                 <NavLink
@@ -95,7 +113,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   className={({ isActive }) => `navbar__nav-link ${isActive ? 'navbar__nav-link--active' : ''}`}
                 >
                   <Users size={15} />
-                  <span>Referrals {contacts.length > 0 ? `(${contacts.length})` : ''}</span>
+                  <span>
+                    <span className="nav-text-full">Referrals {contacts.length > 0 ? `(${contacts.length})` : ''}</span>
+                    <span className="nav-text-short">Network {contacts.length > 0 ? `(${contacts.length})` : ''}</span>
+                  </span>
                 </NavLink>
 
                 <NavLink
@@ -103,7 +124,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   className={({ isActive }) => `navbar__nav-link ${isActive ? 'navbar__nav-link--active' : ''}`}
                 >
                   <Grid3X3 size={15} />
-                  <span>Pipeline Matrix</span>
+                  <span>
+                    <span className="nav-text-full">Pipeline Matrix</span>
+                    <span className="nav-text-short">Matrix</span>
+                  </span>
                 </NavLink>
               </>
             ) : (
@@ -114,8 +138,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   className={({ isActive }) => `navbar__nav-link ${isActive ? 'navbar__nav-link--active' : ''}`}
                 >
                   <Sparkles size={15} className="navbar__ai-icon" />
-                  <span style={{ fontWeight: 600 }}>AI Company Fit</span>
+                  <span style={{ fontWeight: 600 }}>
+                    <span className="nav-text-full">AI Company Fit</span>
+                    <span className="nav-text-short">Company Fit</span>
+                  </span>
                   <span className="navbar__badge-free">FREE TOOL</span>
+                </NavLink>
+
+                <NavLink
+                  to="/tailor"
+                  className={({ isActive }) => `navbar__nav-link ${isActive ? 'navbar__nav-link--active' : ''}`}
+                >
+                  <FileText size={15} />
+                  <span style={{ fontWeight: 600 }}>
+                    <span className="nav-text-full">Resume & Cover Letter</span>
+                    <span className="nav-text-short">Resume Suite</span>
+                  </span>
+                  <span className="navbar__badge-free">FREE</span>
                 </NavLink>
 
                 <NavLink
@@ -123,7 +162,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   className={({ isActive }) => `navbar__nav-link ${isActive ? 'navbar__nav-link--active' : ''}`}
                 >
                   <Home size={15} />
-                  <span>Overview & Features</span>
+                  <span>
+                    <span className="nav-text-full">Overview & Features</span>
+                    <span className="nav-text-short">Features</span>
+                  </span>
                 </NavLink>
               </>
             )}
@@ -164,7 +206,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               </button>
               <button className="btn btn--primary btn--sm" onClick={() => navigate('/register')}>
                 <UserPlus size={14} />
-                <span>Get Started Free</span>
+                <span>
+                  <span className="nav-text-full">Get Started Free</span>
+                  <span className="nav-text-short">Get Started</span>
+                </span>
               </button>
             </div>
           )}
@@ -260,6 +305,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               </NavLink>
 
               <NavLink
+                to="/tailor"
+                onClick={closeMobile}
+                className={({ isActive }) =>
+                  `navbar__mobile-drawer-link ${isActive ? 'navbar__mobile-drawer-link--active' : ''}`
+                }
+              >
+                <FileText size={18} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                  <span>Resume & Cover Letter</span>
+                </div>
+              </NavLink>
+
+              <NavLink
                 to="/contacts"
                 onClick={closeMobile}
                 className={({ isActive }) =>
@@ -302,6 +360,25 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   </div>
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                     Live Career Scraper & Match Scorer
+                  </span>
+                </div>
+              </NavLink>
+
+              <NavLink
+                to="/tailor"
+                onClick={closeMobile}
+                className={({ isActive }) =>
+                  `navbar__mobile-drawer-link ${isActive ? 'navbar__mobile-drawer-link--active' : ''}`
+                }
+              >
+                <FileText size={18} />
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontWeight: 600 }}>Resume & Cover Letter</span>
+                    <span className="navbar__badge-free">FREE</span>
+                  </div>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                    Action-Impact Bullets, ATS Audit & Cover Letter
                   </span>
                 </div>
               </NavLink>

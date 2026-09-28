@@ -7,7 +7,7 @@
   border: 1px solid $border-subtle;
   border-radius: $radius-lg;
   box-shadow: $shadow-md;
-  transition: all $transition-base;
+  transition: all $transition-smooth;
 
   &:hover {
     border-color: $border-medium;
@@ -17,11 +17,16 @@
 @mixin glass-card-interactive {
   @include glass-panel;
   cursor: pointer;
+  transition: all $transition-spring;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: $shadow-lg;
-    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-4px);
+    box-shadow: $shadow-brand;
+    border-color: rgba(99, 102, 241, 0.4);
+  }
+
+  &:active {
+    transform: translateY(-1px) scale(0.99);
   }
 }
 
@@ -38,19 +43,46 @@
 }
 
 @mixin custom-scrollbar {
+  @supports not selector(::-webkit-scrollbar) {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+
   &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
   &::-webkit-scrollbar-track {
     background: transparent;
   }
+
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--scrollbar-thumb);
     border-radius: 999px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    transition: background 0.2s ease;
+
     &:hover {
-      background: rgba(255, 255, 255, 0.28);
+      background: var(--scrollbar-thumb-hover);
+      border: 1px solid transparent;
+      background-clip: padding-box;
     }
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  &::-webkit-resizer {
+    background: transparent;
   }
 }
 

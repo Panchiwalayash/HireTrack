@@ -9,6 +9,8 @@ const AppLayoutInner: React.FC = () => {
   const { user } = useAuth();
   const { isDataLoading, handleImportOptimizedJobs } = useData();
 
+  const location = useLocation();
+
   useEffect(() => {
     if (user) {
       const pending = sessionStorage.getItem('pending_portfolio_import');
@@ -28,8 +30,11 @@ const AppLayoutInner: React.FC = () => {
 
   return (
     <div className="app-container">
+      {/* Living Ambient Glowing Orbs on every page */}
+      <div className="global-orb global-orb--1" aria-hidden="true" />
+      <div className="global-orb global-orb--2" aria-hidden="true" />
       <Navbar />
-      <main className="main-content">
+      <main key={location.pathname} className="main-content page-enter-animation">
         {isDataLoading && (
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '14px' }}>
             <span

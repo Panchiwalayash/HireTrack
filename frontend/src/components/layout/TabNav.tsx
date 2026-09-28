@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Grid3X3, Users, Briefcase, Sparkles } from 'lucide-react';
+import { LayoutDashboard, Grid3X3, Users, Briefcase, Sparkles, FileText } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 
 export const TabNav: React.FC = () => {
@@ -19,6 +19,11 @@ export const TabNav: React.FC = () => {
       <NavLink to="/optimizer" className={getNavLinkClass}>
         <Sparkles size={16} />
         <span>Company Fit AI</span>
+      </NavLink>
+
+      <NavLink to="/tailor" className={getNavLinkClass}>
+        <FileText size={16} />
+        <span>Resume Tailor</span>
       </NavLink>
 
       <NavLink to="/jobs" className={getNavLinkClass}>
